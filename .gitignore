@@ -1,3 +1,8 @@
+src/main
+src/main.zip
+
+.idea/*
+
 # Binaries for programs and plugins
 *.exe
 *.exe~
