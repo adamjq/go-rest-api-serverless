@@ -1,6 +1,13 @@
 # go-rest-api-serverless
 Serverless Golang REST API hosted on AWS Lambda.
 
+## Development
+
+Run the Lambda API locally for testing:
+```
+make invoke-no-event
+```
+
 ## Packaging and deployment
 
 An S3 bucket must be created before deployment to hold the lambda code:

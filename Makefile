@@ -37,3 +37,6 @@ deploy:
 		--capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
 
 deploy-stack: clean validate build bundle package deploy
+
+invoke-no-event: clean build bundle
+	sam local invoke --no-event
