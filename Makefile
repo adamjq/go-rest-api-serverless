@@ -10,6 +10,10 @@ validate:
 #
 #test:
 
+generate:
+	go generate ./src/api/
+.PHONY: generate
+
 clean:
 	rm -f ./packaged.yml
 	rm -f src/$(BINARY_NAME)

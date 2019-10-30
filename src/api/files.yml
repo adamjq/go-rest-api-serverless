@@ -1,0 +1,78 @@
+openapi: "3.0.2"
+info:
+  title: "Files API"
+  description: "API for uploading and retrieving files"
+  version: "1.0"
+paths:
+
+  /files/{id}:
+    get:
+      operationId: GetFile
+      description: Returns a file based on it's identifier.
+      tags:
+      - file
+      parameters:
+        - name: id
+          in: path
+          description: Identifier of file to fetch
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: file response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+        '404':
+          description: The file does not exist.
+
+components:
+  schemas:
+    File:
+      description: File.
+      type: object
+      required:
+        - id
+        - customerId
+        - name
+        - location
+        - modifiedDateTime
+        - createdDateTime
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: File identifier.
+          example: 1ce90bf8-2029-49dc-8aa6-d959ce92fa9b
+        customerId:
+          type: string
+          format: uuid
+          description: Customer identifier.
+          example: 1ce90bf8-2029-49dc-8aa6-d959ce92fa9b
+        name:
+          type: string
+          description: The name of the file.
+          example: photo.png
+        description:
+          type: string
+          description: A description of the file.
+        location:
+          type: string
+          description: Location of the file in S3 in format Bucket/Key.
+        modifiedDateTime:
+          type: string
+          format: date-time
+          description: The timestamp the file was last updated
+        createdDateTime:
+          type: string
+          format: date-time
+          description: The timestamp the file was created
+        status:
+          type: string
+          enum:
+            - UPLOADED
+            - REJECTED

@@ -1,6 +1,8 @@
 src/main
 src/main.zip
 
+.bin/
+
 .idea/*
 
 # Binaries for programs and plugins

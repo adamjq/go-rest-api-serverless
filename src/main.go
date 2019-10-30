@@ -11,7 +11,7 @@ type MyEvent struct {
 }
 
 func HandleRequest(ctx context.Context, name MyEvent) (string, error) {
-        return fmt.Sprintf("Hello from Lambda"), nil
+        return fmt.Sprint
 }
 
 func main() {
