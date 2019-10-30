@@ -1,6 +1,9 @@
 src/main
 src/main.zip
 
+# Packaged CFN
+packaged.yml
+
 .bin/
 
 .idea/*

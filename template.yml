@@ -1,19 +1,73 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: Serverless REST API
+
+Globals:
+  Function:
+    Runtime: go1.x
+    Timeout: 10
+    MemorySize: 512
+
 Resources:
+  
   ApiFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: main
       CodeUri: src/main.zip
-      Runtime: go1.x
-      MemorySize: 512
       Policies: AWSLambdaBasicExecutionRole
-      Timeout: 10
+      Environment:
+        Variables:
+          FILE_TABLE: !Ref FileTable
       Events:
         ApiCall:
           Type: Api
           Properties:
             Path: /{proxy+}
             Method: any
+
+  FileTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: 'id'
+          AttributeType: 'S'
+        - AttributeName: 'location'
+          AttributeType: 'S'
+        - AttributeName: 'createdDateTime'
+          AttributeType: 'S'
+        - AttributeName: 'modifiedDateTime'
+          AttributeType: 'S'
+      KeySchema:
+        - AttributeName: 'id'
+          KeyType: 'HASH'
+        - AttributeName: 'createdDateTime'
+          KeyType: 'RANGE'
+      LocalSecondaryIndexes:
+        - IndexName: lastModified
+          KeySchema:
+            - AttributeName: 'id'
+              KeyType: 'HASH'
+            - AttributeName: 'modifiedDateTime'
+              KeyType: 'RANGE'
+          Projection:
+            ProjectionType: ALL
+      GlobalSecondaryIndexes:
+        - IndexName: location
+          KeySchema:
+            - AttributeName: 'location'
+              KeyType: HASH
+            - AttributeName: 'createdDateTime'
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      StreamSpecification:
+        StreamViewType: 'NEW_AND_OLD_IMAGES'
+      TimeToLiveSpecification:
+        AttributeName: 'ttl'
+        Enabled: true
+      BillingMode: PAY_PER_REQUEST
+      SSESpecification:
+        SSEEnabled: true
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true

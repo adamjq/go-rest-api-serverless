@@ -10,6 +10,7 @@ validate:
 #
 #test:
 
+
 generate:
 	go generate ./src/api/
 .PHONY: generate
@@ -40,7 +41,7 @@ deploy:
 		--stack-name "${STACK_NAME}" \
 		--capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
 
-deploy-stack: clean validate build bundle package deploy
+deploy-stack: clean validate generate build bundle package deploy
 
 invoke-no-event: clean build bundle
 	sam local invoke --no-event
