@@ -1,0 +1,223 @@
+openapi: 3.0.0
+
+info:
+  title: users-api
+  description: An API to manage users.
+  version: 2019-11-07
+
+# Enable request validator. See doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-request-validation-sample-api-swagger.html
+x-amazon-apigateway-request-validators:
+  all:
+    validateRequestBody: true
+    validateRequestParameters: true
+x-amazon-apigateway-request-validator: all
+
+x-amazon-apigateway-gateway-responses:
+  # Provide more detailed error message for bad request body errors. See doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions-gateway-responses.html
+  BAD_REQUEST_BODY:
+    responseTemplates:
+      application/json: '{"errorCode": "BadRequestBody", "message": "$context.error.validationErrorString"}'
+    responseParameters:
+      gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+  DEFAULT_4XX:
+    responseParameters:
+      gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+  DEFAULT_5XX:
+    responseParameters:
+      gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+paths:
+
+  /users/{id}:
+    get:
+      summary: Get an user.
+      operationId: GetUser
+      description: Returns a user based on it's id.
+      tags:
+      - user
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: user response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: The user does not exist.
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ApiFunction.Arn}:live/invocations
+        httpMethod: POST
+        type: aws_proxy
+        passthroughBehavior: never
+      security:
+        - sigv4: []
+
+    put:
+      summary: Update an user.
+      operationId: UpdateUser
+      description: Update and return an user
+      tags:
+      - user
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUser'
+      responses:
+        '201':
+          description: user updated response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ApiFunction.Arn}:live/invocations
+        httpMethod: POST
+        type: aws_proxy
+        passthroughBehavior: never
+      security:
+        - sigv4: []
+
+    delete:
+      summary: Deletes a user.
+      operationId: DeleteUser
+      description: Deletes a user
+      tags:
+      - user
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: user deleted response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ApiFunction.Arn}:live/invocations
+        httpMethod: POST
+        type: aws_proxy
+        passthroughBehavior: never
+      security:
+        - sigv4: []
+
+  /users:
+    get:
+      summary: Return a list of user.
+      operationId: ListUsers
+      description: Returns a list of users.
+      tags:
+      - user
+      responses:
+        '200':
+          description: list of users response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersList'
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ApiFunction.Arn}:live/invocations
+        httpMethod: POST
+        type: aws_proxy
+        passthroughBehavior: never
+      security:
+        - sigv4: []
+
+    post:
+      summary: Create an user.
+      operationId: CreateUser
+      description: Create an user and returns the user
+      tags:
+      - user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+      responses:
+        '201':
+          description: attachment response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${AttachmentApiLambda.Arn}:live/invocations
+        httpMethod: POST
+        type: aws_proxy
+        passthroughBehavior: never
+      security:
+        - sigv4: []
+
+components:
+  parameters:
+    id:
+      name: id
+      in: path
+      description: Identifier of user
+      required: true
+      example: 1ce90bf8-2029-49dc-8aa6-d959ce92fa9b
+      schema:
+        type: string
+        format: uuid
+  securitySchemes:
+    sigv4:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: awsSigv4
+  schemas:
+    User:
+      description: User.
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Attachment identifier.
+          example: 1ce90bf8-2029-49dc-8aa6-d959ce92fa9b
+        name:
+          type: string
+          description: Name of the user.
+          example: Bob
+       
+    CreateUser:
+      description: Input for creating a user.
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: Name of the user.
+          example: Bob
+
+    UpdateUser:
+      description: Input for updating a user.
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: Name of the user.
+          example: Bob
+ 
+    UsersList:
+      description: Response for list of Users
+      type: array
+      items:
+        $ref: '#/components/schemas/User'

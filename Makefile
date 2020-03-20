@@ -10,9 +10,8 @@ validate:
 #
 #test:
 
-
 generate:
-	go generate ./src/api/
+	go generate ./pkg/api/
 .PHONY: generate
 
 clean:
