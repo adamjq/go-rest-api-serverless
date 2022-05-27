@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    command: [ "make", "run" ]
+    environment:
+      ADDR: 8080
+    ports:
+      - 8080:8080
+    volumes:
+      - .:/src

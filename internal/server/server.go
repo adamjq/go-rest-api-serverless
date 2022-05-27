@@ -1,4 +1,4 @@
-package users
+package server
 
 import (
 	"net/http"
@@ -32,7 +32,7 @@ func CreateUser(c echo.Context) error {
 func GetUser(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return echoerr.NewHTTPError(http.StatusInternalServerError, "error parsing id", err)
+		return echo.NewHTTPError(http.StatusInternalServerError, "error parsing id", err)
 	}
 
 	return c.JSON(http.StatusOK, users[id])
@@ -46,7 +46,7 @@ func UpdateUser(c echo.Context) error {
 
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return echoerr.NewHTTPError(http.StatusInternalServerError, "error parsing id", err)
+		return echo.NewHTTPError(http.StatusInternalServerError, "error parsing id", err)
 	}
 
 	users[id].Name = u.Name
@@ -56,7 +56,7 @@ func UpdateUser(c echo.Context) error {
 func DeleteUser(c echo.Context) error {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		return echoerr.NewHTTPError(http.StatusInternalServerError, "error parsing id", err)
+		return echo.NewHTTPError(http.StatusInternalServerError, "error parsing id", err)
 	}
 
 	delete(users, id)

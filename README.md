@@ -1,31 +1,18 @@
 # go-rest-api-serverless
 Serverless Golang REST API hosted on AWS Lambda.
 
+## Requirements
+- Go 1.18
+- Docker
+
 ## Development
 
-Run the Lambda API locally for testing:
+Launch a development server with Docker:
 ```
-make invoke-no-event
-```
-
-## Packaging and deployment
-
-An S3 bucket must be created before deployment to hold the lambda code:
-
-```bash
-aws s3 mb s3://BUCKET_NAME
+docker-compose up
 ```
 
-Set the follow environment variables:
-```bash
-export S3_BUCKET=golang-serverless-proxy-api
-export STACK_NAME=golang-serverless-proxy-api
+Run unit tests:
 ```
-
-```bash
-# Build and test during development
-make
-
-# Build, Package and Deploy
-make deploy-stack
+make test
 ```
