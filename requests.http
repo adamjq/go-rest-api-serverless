@@ -1,6 +1,19 @@
 ### Health check
 GET http://localhost:8080/healthz
 
-### Health check
+### ListUsers
 GET http://localhost:8080/users
 
+### GetUser
+GET http://localhost:8080/users/1
+
+### CreateUser
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+    "name": "Adam"
+}
+
+### DeleteUser
+DELETE http://localhost:8080/users/1

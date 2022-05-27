@@ -1,9 +1,9 @@
 package server
 
 import (
-	"fmt"
+	"net/http"
 
-	"github.com/google/uuid"
+	"github.com/adamjq/go-rest-api-serverless/pkg/api"
 	"github.com/labstack/echo/v4"
 )
 
@@ -20,77 +20,57 @@ var (
 )
 
 func (s Server) CreateUser(ctx echo.Context) error {
-	fmt.Println("CreateUser: called")
-	// newuser := new(api.CreateUser)
-	// if err := ctx.Bind(newCust); err != nil {
-	// 	return err
-	// }
 
-	return nil
+	newUser := new(api.CreateUserInput)
+	if err := ctx.Bind(newUser); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	// store the user
+	u := &user{
+		ID:   seq,
+		Name: newUser.Name,
+	}
+	users[u.ID] = u
+	seq++
+
+	return ctx.JSON(http.StatusCreated, u)
 }
 
-func (s Server) GetUser(ctx echo.Context, userID uuid.UUID) error {
-	fmt.Println("GetUser: called")
-	return nil
+func (s Server) GetUser(ctx echo.Context, userID int) error {
+	if _, ok := users[userID]; ok {
+		return ctx.JSON(http.StatusOK, users[userID])
+	}
+	return echo.NewHTTPError(http.StatusNotFound)
 }
 
 func (s Server) ListUsers(ctx echo.Context) error {
-	fmt.Println("ListUsers: called")
-	return nil
+	allUsers := make([]user, 0, len(users))
+	for u := range users {
+		allUsers = append(allUsers, *users[u])
+	}
+	return ctx.JSON(http.StatusOK, allUsers)
 }
 
-func (s Server) UpdateUser(ctx echo.Context, userID uuid.UUID) error {
-	fmt.Println("UpdateUser: called")
-	return nil
+func (s Server) UpdateUser(ctx echo.Context, userID int) error {
+	updateUserInput := new(api.UpdateUserInput)
+	if err := ctx.Bind(updateUserInput); err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+
+	if _, ok := users[userID]; ok {
+
+		// update the name
+		users[userID].Name = updateUserInput.Name
+		return ctx.JSON(http.StatusOK, users[userID])
+	}
+	return echo.NewHTTPError(http.StatusNotFound)
 }
 
-func (s Server) DeleteUser(ctx echo.Context, userID uuid.UUID) error {
-	fmt.Println("UpdateUser: called")
-	return nil
+func (s Server) DeleteUser(ctx echo.Context, userID int) error {
+	if _, ok := users[userID]; ok {
+		delete(users, userID)
+		return ctx.NoContent(http.StatusNoContent)
+	}
+	return echo.NewHTTPError(http.StatusNotFound)
 }
-
-// func CreateUser(c echo.Context) error {
-// 	u := &user{
-// 		ID: seq,
-// 	}
-// 	if err := c.Bind(u); err != nil {
-// 		return err
-// 	}
-// 	users[u.ID] = u
-// 	seq++
-// 	return c.JSON(http.StatusCreated, u)
-// }
-
-// func GetUser(c echo.Context) error {
-// 	id, err := strconv.Atoi(c.Param("id"))
-// 	if err != nil {
-// 		return echo.NewHTTPError(http.StatusInternalServerError, "error parsing id", err)
-// 	}
-
-// 	return c.JSON(http.StatusOK, users[id])
-// }
-
-// func UpdateUser(c echo.Context) error {
-// 	u := new(user)
-// 	if err := c.Bind(u); err != nil {
-// 		return err
-// 	}
-
-// 	id, err := strconv.Atoi(c.Param("id"))
-// 	if err != nil {
-// 		return echo.NewHTTPError(http.StatusInternalServerError, "error parsing id", err)
-// 	}
-
-// 	users[id].Name = u.Name
-// 	return c.JSON(http.StatusOK, users[id])
-// }
-
-// func DeleteUser(c echo.Context) error {
-// 	id, err := strconv.Atoi(c.Param("id"))
-// 	if err != nil {
-// 		return echo.NewHTTPError(http.StatusInternalServerError, "error parsing id", err)
-// 	}
-
-// 	delete(users, id)
-// 	return c.NoContent(http.StatusNoContent)
-// }

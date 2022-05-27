@@ -126,10 +126,9 @@ components:
       in: path
       description: Identifier of user
       required: true
-      example: 1ce90bf8-2029-49dc-8aa6-d959ce92fa9b
+      example: 1
       schema:
-        type: string
-        format: uuid
+        type: integer
   schemas:
     User:
       description: User.
