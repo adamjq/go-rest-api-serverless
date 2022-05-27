@@ -20,37 +20,37 @@ import (
 )
 
 // Input for creating a user.
-type CreateUser struct {
+type CreateUserInput struct {
 	// Name of the user.
 	Name string `json:"name"`
 }
 
 // Input for updating a user.
-type UpdateUser struct {
+type UpdateUserInput struct {
 	// Name of the user.
 	Name string `json:"name"`
 }
 
 // User.
 type User struct {
-	// Attachment identifier.
-	Id openapi_types.UUID `json:"id"`
-
 	// Name of the user.
 	Name string `json:"name"`
+
+	// User identifier.
+	UserID openapi_types.UUID `json:"userID"`
 }
 
 // Response for list of Users
 type UsersList = []User
 
-// Id defines model for id.
-type Id = openapi_types.UUID
+// UserID defines model for userID.
+type UserID = openapi_types.UUID
 
 // CreateUserJSONBody defines parameters for CreateUser.
-type CreateUserJSONBody = CreateUser
+type CreateUserJSONBody = CreateUserInput
 
 // UpdateUserJSONBody defines parameters for UpdateUser.
-type UpdateUserJSONBody = UpdateUser
+type UpdateUserJSONBody = UpdateUserInput
 
 // CreateUserJSONRequestBody defines body for CreateUser for application/json ContentType.
 type CreateUserJSONRequestBody = CreateUserJSONBody
@@ -67,14 +67,14 @@ type ServerInterface interface {
 	// (POST /users)
 	CreateUser(ctx echo.Context) error
 	// Deletes a user.
-	// (DELETE /users/{id})
-	DeleteUser(ctx echo.Context, id Id) error
+	// (DELETE /users/{userID})
+	DeleteUser(ctx echo.Context, userID UserID) error
 	// Get an user.
-	// (GET /users/{id})
-	GetUser(ctx echo.Context, id Id) error
+	// (GET /users/{userID})
+	GetUser(ctx echo.Context, userID UserID) error
 	// Update an user.
-	// (PUT /users/{id})
-	UpdateUser(ctx echo.Context, id Id) error
+	// (PUT /users/{userID})
+	UpdateUser(ctx echo.Context, userID UserID) error
 }
 
 // ServerInterfaceWrapper converts echo contexts to parameters.
@@ -103,48 +103,48 @@ func (w *ServerInterfaceWrapper) CreateUser(ctx echo.Context) error {
 // DeleteUser converts echo context to params.
 func (w *ServerInterfaceWrapper) DeleteUser(ctx echo.Context) error {
 	var err error
-	// ------------- Path parameter "id" -------------
-	var id Id
+	// ------------- Path parameter "userID" -------------
+	var userID UserID
 
-	err = runtime.BindStyledParameterWithLocation("simple", false, "id", runtime.ParamLocationPath, ctx.Param("id"), &id)
+	err = runtime.BindStyledParameterWithLocation("simple", false, "userID", runtime.ParamLocationPath, ctx.Param("userID"), &userID)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter id: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter userID: %s", err))
 	}
 
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.DeleteUser(ctx, id)
+	err = w.Handler.DeleteUser(ctx, userID)
 	return err
 }
 
 // GetUser converts echo context to params.
 func (w *ServerInterfaceWrapper) GetUser(ctx echo.Context) error {
 	var err error
-	// ------------- Path parameter "id" -------------
-	var id Id
+	// ------------- Path parameter "userID" -------------
+	var userID UserID
 
-	err = runtime.BindStyledParameterWithLocation("simple", false, "id", runtime.ParamLocationPath, ctx.Param("id"), &id)
+	err = runtime.BindStyledParameterWithLocation("simple", false, "userID", runtime.ParamLocationPath, ctx.Param("userID"), &userID)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter id: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter userID: %s", err))
 	}
 
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.GetUser(ctx, id)
+	err = w.Handler.GetUser(ctx, userID)
 	return err
 }
 
 // UpdateUser converts echo context to params.
 func (w *ServerInterfaceWrapper) UpdateUser(ctx echo.Context) error {
 	var err error
-	// ------------- Path parameter "id" -------------
-	var id Id
+	// ------------- Path parameter "userID" -------------
+	var userID UserID
 
-	err = runtime.BindStyledParameterWithLocation("simple", false, "id", runtime.ParamLocationPath, ctx.Param("id"), &id)
+	err = runtime.BindStyledParameterWithLocation("simple", false, "userID", runtime.ParamLocationPath, ctx.Param("userID"), &userID)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter id: %s", err))
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter userID: %s", err))
 	}
 
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.UpdateUser(ctx, id)
+	err = w.Handler.UpdateUser(ctx, userID)
 	return err
 }
 
@@ -178,31 +178,31 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 
 	router.GET(baseURL+"/users", wrapper.ListUsers)
 	router.POST(baseURL+"/users", wrapper.CreateUser)
-	router.DELETE(baseURL+"/users/:id", wrapper.DeleteUser)
-	router.GET(baseURL+"/users/:id", wrapper.GetUser)
-	router.PUT(baseURL+"/users/:id", wrapper.UpdateUser)
+	router.DELETE(baseURL+"/users/:userID", wrapper.DeleteUser)
+	router.GET(baseURL+"/users/:userID", wrapper.GetUser)
+	router.PUT(baseURL+"/users/:userID", wrapper.UpdateUser)
 
 }
 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
+	"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",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

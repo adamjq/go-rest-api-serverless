@@ -27,15 +27,15 @@ x-amazon-apigateway-gateway-responses:
       gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
 paths:
 
-  /users/{id}:
+  /users/{userID}:
     get:
       summary: Get an user.
       operationId: GetUser
-      description: Returns a user based on it's id.
+      description: Returns a user based on it's ID.
       tags:
       - user
       parameters:
-        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/userID'
       responses:
         '200':
           description: user response
@@ -53,13 +53,13 @@ paths:
       tags:
       - user
       parameters:
-        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/userID'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateUser'
+              $ref: '#/components/schemas/UpdateUserInput'
       responses:
         '201':
           description: user updated response
@@ -75,7 +75,7 @@ paths:
       tags:
       - user
       parameters:
-        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/userID'
       responses:
         '200':
           description: user deleted response
@@ -110,10 +110,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUser'
+              $ref: '#/components/schemas/CreateUserInput'
       responses:
         '201':
-          description: attachment response
+          description: created user response
           content:
             application/json:
               schema:
@@ -121,8 +121,8 @@ paths:
 
 components:
   parameters:
-    id:
-      name: id
+    userID:
+      name: userID
       in: path
       description: Identifier of user
       required: true
@@ -135,20 +135,20 @@ components:
       description: User.
       type: object
       required:
-        - id
+        - userID
         - name
       properties:
-        id:
+        userID:
           type: string
           format: uuid
-          description: Attachment identifier.
+          description: User identifier.
           example: 1ce90bf8-2029-49dc-8aa6-d959ce92fa9b
         name:
           type: string
           description: Name of the user.
           example: Bob
        
-    CreateUser:
+    CreateUserInput:
       description: Input for creating a user.
       type: object
       required:
@@ -159,7 +159,7 @@ components:
           description: Name of the user.
           example: Bob
 
-    UpdateUser:
+    UpdateUserInput:
       description: Input for updating a user.
       type: object
       required:

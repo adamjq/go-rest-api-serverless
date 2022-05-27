@@ -21,10 +21,15 @@ var (
 
 func (s Server) CreateUser(ctx echo.Context) error {
 	fmt.Println("CreateUser: called")
+	// newuser := new(api.CreateUser)
+	// if err := ctx.Bind(newCust); err != nil {
+	// 	return err
+	// }
+
 	return nil
 }
 
-func (s Server) GetUser(ctx echo.Context, id uuid.UUID) error {
+func (s Server) GetUser(ctx echo.Context, userID uuid.UUID) error {
 	fmt.Println("GetUser: called")
 	return nil
 }
@@ -34,12 +39,12 @@ func (s Server) ListUsers(ctx echo.Context) error {
 	return nil
 }
 
-func (s Server) UpdateUser(ctx echo.Context, id uuid.UUID) error {
+func (s Server) UpdateUser(ctx echo.Context, userID uuid.UUID) error {
 	fmt.Println("UpdateUser: called")
 	return nil
 }
 
-func (s Server) DeleteUser(ctx echo.Context, id uuid.UUID) error {
+func (s Server) DeleteUser(ctx echo.Context, userID uuid.UUID) error {
 	fmt.Println("UpdateUser: called")
 	return nil
 }
