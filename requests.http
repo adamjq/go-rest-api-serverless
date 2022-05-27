@@ -1,3 +1,6 @@
 ### Health check
 GET http://localhost:8080/healthz
 
+### Health check
+GET http://localhost:8080/users
+

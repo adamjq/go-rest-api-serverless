@@ -45,14 +45,6 @@ paths:
                 $ref: '#/components/schemas/User'
         '404':
           description: The user does not exist.
-      x-amazon-apigateway-integration:
-        uri:
-          Fn::Sub: arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ApiFunction.Arn}:live/invocations
-        httpMethod: POST
-        type: aws_proxy
-        passthroughBehavior: never
-      security:
-        - sigv4: []
 
     put:
       summary: Update an user.
@@ -75,14 +67,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-      x-amazon-apigateway-integration:
-        uri:
-          Fn::Sub: arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ApiFunction.Arn}:live/invocations
-        httpMethod: POST
-        type: aws_proxy
-        passthroughBehavior: never
-      security:
-        - sigv4: []
 
     delete:
       summary: Deletes a user.
@@ -99,14 +83,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-      x-amazon-apigateway-integration:
-        uri:
-          Fn::Sub: arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ApiFunction.Arn}:live/invocations
-        httpMethod: POST
-        type: aws_proxy
-        passthroughBehavior: never
-      security:
-        - sigv4: []
 
   /users:
     get:
@@ -122,14 +98,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UsersList'
-      x-amazon-apigateway-integration:
-        uri:
-          Fn::Sub: arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ApiFunction.Arn}:live/invocations
-        httpMethod: POST
-        type: aws_proxy
-        passthroughBehavior: never
-      security:
-        - sigv4: []
 
     post:
       summary: Create an user.
@@ -150,14 +118,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-      x-amazon-apigateway-integration:
-        uri:
-          Fn::Sub: arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${AttachmentApiLambda.Arn}:live/invocations
-        httpMethod: POST
-        type: aws_proxy
-        passthroughBehavior: never
-      security:
-        - sigv4: []
 
 components:
   parameters:
@@ -170,12 +130,6 @@ components:
       schema:
         type: string
         format: uuid
-  securitySchemes:
-    sigv4:
-      type: apiKey
-      name: Authorization
-      in: header
-      x-amazon-apigateway-authtype: awsSigv4
   schemas:
     User:
       description: User.
