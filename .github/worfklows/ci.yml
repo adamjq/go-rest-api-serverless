@@ -24,6 +24,9 @@ jobs:
 
   cdk-ci:
     name: CDK CI
+    defaults:
+      run:
+        working-directory: ./ops/cdk
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
