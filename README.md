@@ -16,3 +16,10 @@ Run unit tests:
 ```
 make test
 ```
+
+## AWS Deployment
+
+```
+export AWS_PROFILE=<YOUR_PROFILE_NAME>
+make deploy
+```
