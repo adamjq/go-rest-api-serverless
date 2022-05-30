@@ -24,3 +24,4 @@ packaged.yml
 .vscode/
 
 dist/
+bin/

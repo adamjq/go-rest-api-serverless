@@ -2,8 +2,13 @@
 CDK_DIR=ops/cdk
 BINARY_NAME=dist/api
 CMD_PATH=cmd/api/main.go
+OPENAPI_SPEC=openapi/api.yaml
 
-default: clean test build
+default: clean validate test build
+
+bin/swagger-cli:
+	@npm install @apidevtools/swagger-cli --prefix bin --no-save
+	@ln -sf node_modules/.bin/swagger-cli bin/swagger-cli
 
 generate:
 	go generate ./...
@@ -19,6 +24,10 @@ build:
 
 run:
 	go run ./cmd/api/main.go
+
+validate: bin/swagger-cli
+	bin/swagger-cli validate $(OPENAPI_SPEC)
+
 
 ########## AWS ##########
 
