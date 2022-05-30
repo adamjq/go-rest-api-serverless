@@ -39,6 +39,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HealthCheckResponse'
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:390056358879:apigateway:us-east-1:lambda:path/2015-03-31/functions/GoRestApiLambdaBackend:live/invocations
+        httpMethod: POST
+        type: aws_proxy
+        passthroughBehavior: never
 
   /users/{userID}:
     get:
@@ -58,6 +64,12 @@ paths:
                 $ref: '#/components/schemas/User'
         '404':
           description: The user does not exist.
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GoRestApiLambdaBackend.Arn}:live/invocations
+        httpMethod: POST
+        type: aws_proxy
+        passthroughBehavior: never
 
     put:
       summary: Update an user.
@@ -80,6 +92,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GoRestApiLambdaBackend.Arn}:live/invocations
+        httpMethod: POST
+        type: aws_proxy
+        passthroughBehavior: never
 
     delete:
       summary: Deletes a user.
@@ -96,6 +114,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GoRestApiLambdaBackend.Arn}:live/invocations
+        httpMethod: POST
+        type: aws_proxy
+        passthroughBehavior: never
 
   /users:
     get:
@@ -111,6 +135,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UsersList'
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:390056358879:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:390056358879:function:GoRestApiServerlessStack-ApiLambdaBackend61C06F12-OUXUAyjRI7ib:live/invocations
+        httpMethod: POST
+        type: aws_proxy
+        passthroughBehavior: never
 
     post:
       summary: Create an user.
@@ -131,6 +161,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GoRestApiLambdaBackend.Arn}:live/invocations
+        httpMethod: POST
+        type: aws_proxy
+        passthroughBehavior: never
 
 components:
   parameters:
