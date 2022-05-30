@@ -18,5 +18,8 @@ Content-Type: application/json
 ### DeleteUser
 DELETE http://localhost:8080/users/1
 
-### AWS
-GET https://3i11yqzhg6.execute-api.us-east-1.amazonaws.com/prod/users
+### AWS healthcheck
+GET https://dnlhyewmck.execute-api.us-east-1.amazonaws.com/prod/healthz
+
+### AWS GetUsers
+GET https://dnlhyewmck.execute-api.us-east-1.amazonaws.com/prod/users

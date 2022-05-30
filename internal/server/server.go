@@ -19,6 +19,15 @@ var (
 	seq   = 1
 )
 
+func (s Server) GetHealth(ctx echo.Context) error {
+	hcMessage := "ok"
+	hc := api.HealthCheckResponse{
+		Message: &hcMessage,
+	}
+
+	return ctx.JSON(http.StatusOK, hc)
+}
+
 func (s Server) CreateUser(ctx echo.Context) error {
 
 	newUser := new(api.CreateUserInput)

@@ -3,7 +3,7 @@ openapi: 3.0.0
 info:
   title: users-api
   description: An API to manage users.
-  version: 2019-11-07
+  version: "2019-11-07"
 
 # Enable request validator. See doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-request-validation-sample-api-swagger.html
 x-amazon-apigateway-request-validators:
@@ -26,6 +26,19 @@ x-amazon-apigateway-gateway-responses:
     responseParameters:
       gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
 paths:
+
+  /healthz:
+    get:
+      summary: Healthcheck.
+      operationId: GetHealth
+      description: Returns a HealthCheck status
+      responses:
+        '200':
+          description: Healthcheck response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthCheckResponse'
 
   /users/{userID}:
     get:
@@ -130,6 +143,14 @@ components:
       schema:
         type: integer
   schemas:
+    HealthCheckResponse:
+      description: Healthcheck endpoint reponse
+      type: object
+      properties:
+        message:
+          type: string
+          example: ok
+  
     User:
       description: User.
       type: object

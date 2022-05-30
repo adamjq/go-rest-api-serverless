@@ -1,5 +1,5 @@
 import { Duration, Stack, StackProps } from "aws-cdk-lib";
-import { LambdaRestApi } from "aws-cdk-lib/aws-apigateway";
+import { LambdaIntegration, RestApi } from "aws-cdk-lib/aws-apigateway";
 import { Code, Function, Runtime } from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
 
@@ -12,7 +12,7 @@ export class ApiStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const backend = new Function(this, "ApiLambdaBackend", {
+    const backendLambda = new Function(this, "ApiLambdaBackend", {
       runtime: LAMBDA_RUNTIME,
       handler: "api",
       code: Code.fromAsset(CODE_DIST),
@@ -20,9 +20,13 @@ export class ApiStack extends Stack {
       memorySize: LAMBDA_DEFAULT_MEMORY,
     });
 
-    // proxy requests to lambda by default
-    new LambdaRestApi(this, "Api", {
-      handler: backend,
+    const apigw = new RestApi(this, "RestApi", {
+      restApiName: "Go Rest API Serverless",
+      description: "A serverless REST API built with Golang"
     });
+
+    apigw.root.addProxy({
+      defaultIntegration: new LambdaIntegration(backendLambda),
+    })
   }
 }

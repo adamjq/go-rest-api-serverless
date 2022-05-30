@@ -6,7 +6,6 @@ import (
 	"log"
 
 	"github.com/adamjq/go-rest-api-serverless/internal/config"
-	"github.com/adamjq/go-rest-api-serverless/internal/healthz"
 	"github.com/adamjq/go-rest-api-serverless/internal/server"
 	"github.com/adamjq/go-rest-api-serverless/pkg/api"
 	"github.com/aws/aws-lambda-go/events"
@@ -43,8 +42,6 @@ func init() {
 	e.Use(middleware.Recover())
 	e.Use(openapimiddleware.OapiRequestValidator(swagger))
 
-	e.GET("/healthz", echo.WrapHandler(healthz.Handler()))
-
 	server := server.Server{}
 	api.RegisterHandlers(e, server)
 
@@ -52,6 +49,7 @@ func init() {
 }
 
 func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	log.Printf("Event: %+v\n", req)
 	return echoLambda.ProxyWithContext(ctx, req)
 }
 
