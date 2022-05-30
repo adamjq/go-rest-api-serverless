@@ -1,4 +1,5 @@
 import { Duration, Stack, StackProps } from "aws-cdk-lib";
+import { LambdaRestApi } from "aws-cdk-lib/aws-apigateway";
 import { Code, Function, Runtime } from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
 
@@ -17,6 +18,11 @@ export class ApiStack extends Stack {
       code: Code.fromAsset(CODE_DIST),
       timeout: LAMBDA_DEFAULT_TIMEOUT,
       memorySize: LAMBDA_DEFAULT_MEMORY,
+    });
+
+    // proxy requests to lambda by default
+    new LambdaRestApi(this, "Api", {
+      handler: backend,
     });
   }
 }
