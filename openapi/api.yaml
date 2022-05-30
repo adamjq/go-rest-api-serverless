@@ -4,27 +4,7 @@ info:
   title: users-api
   description: An API to manage users.
   version: "2019-11-07"
-
-# Enable request validator. See doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-request-validation-sample-api-swagger.html
-x-amazon-apigateway-request-validators:
-  all:
-    validateRequestBody: true
-    validateRequestParameters: true
-x-amazon-apigateway-request-validator: all
-
-x-amazon-apigateway-gateway-responses:
-  # Provide more detailed error message for bad request body errors. See doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions-gateway-responses.html
-  BAD_REQUEST_BODY:
-    responseTemplates:
-      application/json: '{"errorCode": "BadRequestBody", "message": "$context.error.validationErrorString"}'
-    responseParameters:
-      gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
-  DEFAULT_4XX:
-    responseParameters:
-      gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
-  DEFAULT_5XX:
-    responseParameters:
-      gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+  
 paths:
 
   /healthz:
